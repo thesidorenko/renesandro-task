@@ -17,18 +17,25 @@
   & td {
     padding: 10px;
     font-size: 14px;
-
-    &__images {
-      &-image {
-        margin: 0;
-        background: lightblue;
-      }
-    }
+    text-align: center;
   }
 
   & th, td, tr {
     border-bottom: 1px solid lightgray;
     border-right: 1px solid lightgrey;
+  }
+}
+
+.td__images {
+  &-image {
+    padding: 2px 4px;
+    border-radius: 10px;
+    background-color: lightblue;
+    margin-bottom: 5px;
+  }
+
+  & :last-child {
+    margin-bottom: 0;
   }
 }
 
@@ -38,11 +45,28 @@
 
 .td__input-name {
   cursor: pointer;
+
+  & input {
+    width: 90%;
+  }
+  & svg {
+    vertical-align: middle;
+  }
 }
 
 .td__amount input {
   max-width: 50px;
   text-align: right;
+}
+
+.td__result {
+  & a {
+    background: rgb(153, 202, 168);
+    padding: 5px 15px;
+    border-radius: 10px;
+    color: black;
+    text-decoration: none;
+  }
 }
 
 .select {

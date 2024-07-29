@@ -1,18 +1,17 @@
 import { useState } from 'react';
-import './TaskCard.scss';
-import { RxCross1, RxChevronDown, RxChevronUp } from "react-icons/rx";
 import { v4 as uuidv4 } from 'uuid';
+import { RxCross1, RxChevronDown, RxChevronUp } from "react-icons/rx";
 import { ref, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage';
+
+import './TaskCard.scss';
+import { getImage } from '../../api/api';
 import { storage } from '../../firebase/firebaseConfig';
 
-const TaskCard = ({ task, setTasks, setSelectedTask, onGenerateImage, handleCreateImageButton }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
+const TaskCard = ({ task, setTasks, setSelectedTask }) => {
   const [expandedImages, setExpandedImages] = useState([]);
-
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
-  // const [urls, setUrls] = useState([]);
-  // const [images, setImages] = useState([])
+  const [images, setImages] = useState(task.images)
 
   const toggleImage = (imageId) => {
     setExpandedImages(prev =>
@@ -20,46 +19,51 @@ const TaskCard = ({ task, setTasks, setSelectedTask, onGenerateImage, handleCrea
     );
   };
 
-  const handleInputChange = (e, index, fieldName) => {
-    const { value } = e.target;
-    const newImages = [...task.images];
-    newImages[index] = { ...newImages[index], [fieldName]: value };
-
-    setSelectedTask(prev => ({ ...prev, images: newImages }));
+  const handleCreateImageButton = (task) => {
+    const newImage = {
+      id: uuidv4(),
+      title: `Image${task.images.length + 1}`,
+      dimension: '1x1',
+      style: '',
+      manual_prompts: '',
+      gen_per_ref: '',
+      flow: '',
+      images: []
+    };
+    setImages(prev => [newImage, ...prev]);
+    setSelectedTask(prev => ({...prev, images: [newImage, ...prev.images]}));
   }
 
   const handleFileChange = (e, imageId) => {
     const selectedFiles = Array.from(e.target.files);
-    setFiles(selectedFiles);
-    console.log("Selected Files:", selectedFiles);
-
     const filePreviews = selectedFiles.map(file => URL.createObjectURL(file));
-    setPreviews(filePreviews);
+    setFiles(selectedFiles);
+
+    setPreviews(prev => [...prev, ...filePreviews]);
 
     selectedFiles.forEach((file) => {
       const storageRef = ref(storage, `images/${file.name}`);
 
       uploadBytes(storageRef, file).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
-
-
-          console.log("File available at:", url); // Log the file URL
-          setTasks(prevTasks => prevTasks.map(el => {
-            if (el.id === task.id) {
-              return {
-                ...el,
-                images: el.images.map(layer => layer?.id === imageId ? { ...layer, images: [...layer.images, url]} : layer)
-              }
+          setImages(prev => prev.map((img) => {
+            console.log(img)
+            if (img.id === imageId) {
+              return { ...img, images: [...img.images, url] }
             }
-            return el;
-          }
-          ));
+            return img;
+          }))
         });
       }).catch(error => {
         console.error("Error uploading file:", error);
       });
     });
   };
+
+  const handleInputChange = (e, index, fieldName) => {
+    const newImages = [...images];
+    newImages[index][fieldName] = e.target.value;
+  }
 
   const handleDeleteImageButton = (preview) => {
     const index = previews.indexOf(preview);
@@ -81,11 +85,13 @@ const TaskCard = ({ task, setTasks, setSelectedTask, onGenerateImage, handleCrea
   const handleSubmit = (e, image) => {
     e.preventDefault();
 
-    // if (Object.values(image).some(value => !value)) {
-    //   alert('All fields must be filled.');
-    //   return;
-    // }
-    // onGenerateImage(selectedImage, task.id);
+    getImage(image)
+      .then(res => {
+        console.log(res.data);
+        setSelectedTask(null);
+        setTasks(prev => prev.map(t => t.id === task.id ? {...t, images: [image, ...t.images]} : t));
+      })
+      .catch(err => console.log('There was an error making the request:', err));
   }
 
   return (
@@ -99,15 +105,15 @@ const TaskCard = ({ task, setTasks, setSelectedTask, onGenerateImage, handleCrea
         <button onClick={() => handleCreateImageButton(task)} type='button'>Create image</button>
       </div>
       <div className='task__images'>
-        {task.images.map((image, index) => {
-          const isExpanded = expandedImages.includes(image.id);
-          const { dimension, manual_prompts, flow, gen_per_ref, style } = image;
-          console.log({image})
+        {images.map((image, index) => {
+          const { id, title, dimension, manual_prompts, flow, gen_per_ref, style } = image;
+          const isExpanded = expandedImages.includes(id);
+
           return (
             <form className='form__images' onSubmit={(e) => handleSubmit(e, image)} key={uuidv4()}>
               <div className='form__image' key={image.id}>
                 <div className='image__top' onClick={() => toggleImage(image.id)}>
-                  <p className='form__image_title'>{image.title}</p>
+                  <p className='form__image_title'>{title}</p>
                   {isExpanded ? <RxChevronUp /> : <RxChevronDown />}
                 </div>
                 {isExpanded && (
@@ -126,7 +132,12 @@ const TaskCard = ({ task, setTasks, setSelectedTask, onGenerateImage, handleCrea
                       </select>
                     </div>
                     <div className='form__input-wrapper'>
-                      <select className='form__select-flow form__field' value={flow} required onChange={(e) => handleInputChange(e, index, 'flow')}>
+                      <select
+                        className='form__select-flow form__field'
+                        value={flow}
+                        required
+                        onChange={(e) => handleInputChange(e, index, 'flow')}
+                      >
                         <option value="" disabled selected>Flow</option>
                         <option value="other_models_mix">other_models_mix</option>
                         <option value="mj_model">mj_model</option>
@@ -154,7 +165,6 @@ const TaskCard = ({ task, setTasks, setSelectedTask, onGenerateImage, handleCrea
                         type="text"
                         placeholder='Manual prompts (optional)'
                         className='form__field'
-                        value={manual_prompts}
                         onChange={(e) => handleInputChange(e, index, 'manual_prompts')}
                       />
                     </div>
@@ -165,12 +175,15 @@ const TaskCard = ({ task, setTasks, setSelectedTask, onGenerateImage, handleCrea
                         placeholder='Generates per ref'
                         required
                         className='form__field'
-                        value={gen_per_ref}
                         onChange={(e) => handleInputChange(e, index, 'gen_per_ref')}
                       />
                     </div>
                     <div className='form__input-wrapper'>
-                      <select className='form__select-styles form__field' value={style} onChange={(e) => handleInputChange(e, index, 'style')}>
+                      <select
+                        className='form__select-styles form__field'
+                        value={style}
+                        onChange={(e) => handleInputChange(e, index, 'style')}
+                      >
                         <option value='' disabled selected>Styles</option>
                         <option value="An ultra-realistic photography">An ultra-realistic photography</option>
                         <option value="Anime style">Anime style</option>
@@ -187,4 +200,5 @@ const TaskCard = ({ task, setTasks, setSelectedTask, onGenerateImage, handleCrea
     </div>
   )
 }
+
 export default TaskCard;

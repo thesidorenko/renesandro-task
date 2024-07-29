@@ -92,6 +92,7 @@
   }
 
   & .image__top {
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -122,9 +123,6 @@
       font-size: 14px;
     }
   }
-}
-.form__field {
-  // color: gray;
 }
 
 .preview__wrapper {
