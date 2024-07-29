@@ -1,0 +1,160 @@
+.task {
+  max-height: 95vh;
+  overflow-y: scroll;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  &__title {
+    font-size: 32px;
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__generate-button {
+    background-color: rgb(39, 39, 39);
+    color: #fff;
+    width: fit-content;
+    border-radius: 5px;
+    padding: 5px 35px;
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 15px;
+  }
+}
+
+.task__images {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form__inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form__images {
+  border: 1px solid lightgray;
+  padding: 5px 10px;
+  border-radius: 5px;
+
+  &_top {
+    display: flex;
+    justify-content: space-between;
+
+    & h3 {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    & button {
+      border: 1px solid rgb(47, 47, 47);
+      border-radius: 5px;
+      font-size: 13px;
+    }
+  }
+
+  & .images {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-block: 10px;
+  }
+
+  & .form__image {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    &_title {
+      font-weight: 600;
+    }
+  }
+
+  & .image__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.form {
+  &__input-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid lightgray;
+    padding: 5px 10px;
+    border-radius: 5px;
+
+    & label {
+      font-size: 13px;
+      color: gray;
+    }
+  }
+
+  &__input-file {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    & label {
+      font-weight: 700;
+      font-size: 14px;
+    }
+  }
+}
+.form__field {
+  // color: gray;
+}
+
+.preview__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  & .image {
+    position: relative;
+
+    &__button-delete {
+      background-color: rgb(189, 189, 189);
+      font-size: 9px;
+      border-radius: 50px;
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      right: -5px;
+      top: -5px;
+    }
+
+    & img {
+      width: 80px;
+      height: 80px;
+    }
+  }
+}
+
+.button-close {
+  font-size: 16px;
+}

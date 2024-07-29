@@ -1,0 +1,90 @@
+.table {
+  width: 100%;
+  border: 1px solid lightgrey;
+  font-family: 'Nunito Sans', sans-serif;
+  border-collapse: collapse;
+  border-radius: 10px;
+  padding: 10px;
+
+  & thead {
+    background-color: rgb(240, 240, 240);
+  }
+
+  & th {
+    font-weight: 400;
+    padding: 10px;
+  }
+  & td {
+    padding: 10px;
+    font-size: 14px;
+
+    &__images {
+      &-image {
+        margin: 0;
+        background: lightblue;
+      }
+    }
+  }
+
+  & th, td, tr {
+    border-bottom: 1px solid lightgray;
+    border-right: 1px solid lightgrey;
+  }
+}
+
+.td__text-center {
+  text-align: center;
+}
+
+.td__input-name {
+  cursor: pointer;
+}
+
+.td__amount input {
+  max-width: 50px;
+  text-align: right;
+}
+
+.select {
+  border-radius: 10px;
+  padding: 4px 3px;
+
+  & option {
+    padding: 5px;
+    margin: 5px;
+  }
+
+  &-dimension {
+    background-color: rgba(192, 140, 218, 0.569);
+  }
+  &-templateid {
+    background: rgb(245, 176, 187);
+  }
+  &-gen-type {
+    background: rgb(248, 184, 101);
+  }
+}
+
+.button-create {
+  background: rgb(153, 202, 168);
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.button-generate {
+  background-color: rgb(241, 217, 121);
+  border-radius: 5px;
+  padding: 3px 10px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.525);
+}
