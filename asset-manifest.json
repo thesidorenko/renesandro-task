@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/renesandro-task/static/css/main.36ac5e2b.css",
-    "main.js": "/renesandro-task/static/js/main.9dace462.js",
+    "main.js": "/renesandro-task/static/js/main.77032908.js",
     "index.html": "/renesandro-task/index.html",
     "main.36ac5e2b.css.map": "/renesandro-task/static/css/main.36ac5e2b.css.map",
-    "main.9dace462.js.map": "/renesandro-task/static/js/main.9dace462.js.map"
+    "main.77032908.js.map": "/renesandro-task/static/js/main.77032908.js.map"
   },
   "entrypoints": [
     "static/css/main.36ac5e2b.css",
-    "static/js/main.9dace462.js"
+    "static/js/main.77032908.js"
   ]
 }
