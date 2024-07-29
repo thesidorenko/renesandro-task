@@ -106,7 +106,7 @@ const TaskCard = ({ task, setTasks, setSelectedTask }) => {
       </div>
       <div className='task__images'>
         {images.map((image, index) => {
-          const { id, title, dimension, manual_prompts, flow, gen_per_ref, style } = image;
+          const { id, title } = image;
           const isExpanded = expandedImages.includes(id);
 
           return (
@@ -122,7 +122,6 @@ const TaskCard = ({ task, setTasks, setSelectedTask }) => {
                       <label>Proportions</label>
                       <select
                         className='form__select'
-                        value={dimension}
                         required
                         onChange={(e) => handleInputChange(e, index, 'dimension')}
                       >
@@ -134,7 +133,6 @@ const TaskCard = ({ task, setTasks, setSelectedTask }) => {
                     <div className='form__input-wrapper'>
                       <select
                         className='form__select-flow form__field'
-                        value={flow}
                         required
                         onChange={(e) => handleInputChange(e, index, 'flow')}
                       >
@@ -181,7 +179,6 @@ const TaskCard = ({ task, setTasks, setSelectedTask }) => {
                     <div className='form__input-wrapper'>
                       <select
                         className='form__select-styles form__field'
-                        value={style}
                         onChange={(e) => handleInputChange(e, index, 'style')}
                       >
                         <option value='' disabled selected>Styles</option>

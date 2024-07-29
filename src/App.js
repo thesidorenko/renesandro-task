@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import TaskTable from './components/TaskTable/TaskTable';
 import TaskCard from './components/TaskCard/TaskCard';
-import { getImage } from './api/api';
 
 function App() {
   const [tasks, setTasks] = useState([]);
